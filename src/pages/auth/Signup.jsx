@@ -57,8 +57,13 @@ function Signup() {
     )
       return;
     const response = await dispatch(signup(signupDetails));
-    if (response.payload) navigate("/login");
-    else resetSignupState();
+    if (response.payload) {
+      // toast.success("Successfully signed up");
+      navigate("/login");
+    } else {
+      // toast.error("Something went wrong, please try again !");
+      resetSignupState();
+    }
   }
 
   return (
