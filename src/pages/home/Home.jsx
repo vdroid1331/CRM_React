@@ -1,5 +1,7 @@
+import HomeLayout from "../../layouts/Homelayout";
+
 function Home() {
-  return <>Home</>;
+  return <HomeLayout></HomeLayout>;
 }
 
 export default Home;
