@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 
+import ticketSliceReducer from "../Redux/Slices/TicketSlice";
 import authSliceReducer from "./Slices/AuthSlice";
 
 const store = configureStore({
   reducer: {
     auth: authSliceReducer,
+    tickets: ticketSliceReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),
