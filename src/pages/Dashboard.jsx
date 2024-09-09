@@ -1,76 +1,91 @@
-import { AiOutlineDownload } from "react-icons/ai";
-import { usePDF } from "react-to-pdf";
+import { BsFillPencilFill } from "react-icons/bs";
+import { MdCancel, MdOutlineDoneAll, MdPending } from "react-icons/md";
+import { TbProgressBolt } from "react-icons/tb";
 
-import useTickets from "../hooks/useTickets";
-import HomeLayout from "../layouts/Homelayout";
-
-function Dashboard() {
-  const [ticketState] = useTickets();
-  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+import Card from "../../components/Card";
+import useTickets from "../../hooks/useTickets";
+import HomeLayout from "../../layouts/Homelayout";
+function Home() {
+  const [ticketsState] = useTickets();
 
   return (
     <HomeLayout>
-      <div className="min-h-[90vh] flex flex-col items-center justify-center gap-2">
-        <div className="bg-yellow-500 w-full text-black text-center text-3xl py-4 font-bold hover:bg-yellow-400 transition-all ease-in-out duration-300">
-          Tickets Records{" "}
-          <AiOutlineDownload
-            className="cursor-pointer inline "
-            onClick={() => toPDF()}
-          />
+      {ticketsState && (
+        <div className="mt-10 flex flex-row justify-center items-center gap-5 flex-wrap">
+          <Card
+            titleText="Open"
+            status={
+              ticketsState.ticketDistribution.open /
+              ticketsState.downloadedTickets.length
+            }
+            quantity={ticketsState.ticketDistribution.open}
+            background="bg-yellow-300"
+            borderColor="border-green-300"
+            fontColor="text-black"
+            dividerColor="bg-black"
+          >
+            <BsFillPencilFill className="inline mr-2" />
+          </Card>
+          <Card
+            titleText="In Progress"
+            status={
+              ticketsState.ticketDistribution.inProgress /
+              ticketsState.downloadedTickets.length
+            }
+            quantity={ticketsState.ticketDistribution.inProgress}
+            background="bg-orange-300"
+            borderColor="border-red-300"
+            fontColor="text-black"
+            dividerColor="bg-black"
+          >
+            <TbProgressBolt className="inline mr-2" />
+          </Card>
+          <Card
+            titleText="Resolved"
+            status={
+              ticketsState.ticketDistribution.resolved /
+              ticketsState.downloadedTickets.length
+            }
+            quantity={ticketsState.ticketDistribution.resolved}
+            background="bg-purple-300"
+            borderColor="border-blue-700"
+            fontColor="text-black"
+            dividerColor="bg-black"
+          >
+            <MdOutlineDoneAll className="inline mr-2" />
+          </Card>
+          <Card
+            titleText="On Hold"
+            status={
+              ticketsState.ticketDistribution.onHold /
+              ticketsState.downloadedTickets.length
+            }
+            quantity={ticketsState.ticketDistribution.onHold}
+            background="bg-gray-300"
+            borderColor="border-gray-800"
+            fontColor="text-black"
+            dividerColor="bg-black"
+          >
+            <MdPending className="inline mr-2" />
+          </Card>
+          <Card
+            titleText="Cancelled"
+            status={
+              ticketsState.ticketDistribution.cancelled /
+              ticketsState.downloadedTickets.length
+            }
+            quantity={ticketsState.ticketDistribution.cancelled}
+            background="bg-blue-300"
+            borderColor="border-violet-300"
+            fontColor="text-black"
+            dividerColor="bg-black"
+          >
+            <MdCancel className="inline mr-2" />
+          </Card>
         </div>
-
-        {/* Table */}
-
-        <div className="flex flex-col w-full" ref={targetRef}>
-          {/* Title row */}
-          <div className="flex text-white font-bold justify-between items-center gap-3 bg-purple-600 px-2 py-2 grid-cols-7">
-            <div className="table-title basis-[8%] justify-start">
-              Ticket Id
-            </div>
-            <div className="table-title basis-[12%]">Title</div>
-            <div className="table-title basis-[20%]">Description</div>
-            <div className="table-title basis-[20%]">Reporter</div>
-            <div className="table-title basis-[5%]">Priority</div>
-            <div className="table-title basis-[22%]">Assignee</div>
-            <div className="table-title basis-[13%] justify-end mr-4">
-              Status
-            </div>
-          </div>
-
-          {/* ticket details */}
-          {ticketState &&
-            ticketState.ticketList.map((ticket) => {
-              return (
-                <div
-                  key={ticket._id}
-                  className="my-4 py-2 font-normal text-sm flex justify-between items-center gap-3 bg-gray-100 hover:bg-gray-400 transition-all ease-in-out duration-300 text-black px-2 py-2 grid-cols-7"
-                >
-                  <div className="table-title basis-[8%] justify-start">
-                    {ticket._id.substring(0, 5) + ".."}
-                  </div>
-                  <div className="table-title basis-[12%]">{ticket.title}</div>
-                  <div className="table-title basis-[20%]">
-                    {ticket.description}
-                  </div>
-                  <div className="table-title basis-[20%]">
-                    {ticket.assignee}
-                  </div>
-                  <div className="table-title basis-[5%]">
-                    {ticket.ticketPriority}
-                  </div>
-                  <div className="table-title basis-[22%]">
-                    {ticket.assignedTo}
-                  </div>
-                  <div className="table-title basis-[13%] justify-end mr-4">
-                    {ticket.status}
-                  </div>
-                </div>
-              );
-            })}
-        </div>
-      </div>
+      )}
     </HomeLayout>
   );
 }
 
-export default Dashboard;
+export default Home;
