@@ -1,91 +1,102 @@
-import { BsFillPencilFill } from "react-icons/bs";
-import { MdCancel, MdOutlineDoneAll, MdPending } from "react-icons/md";
-import { TbProgressBolt } from "react-icons/tb";
+import DataTable from "react-data-table-component";
+import { AiOutlineDownload } from "react-icons/ai";
+import { usePDF } from "react-to-pdf";
 
-import Card from "../../components/Card";
-import useTickets from "../../hooks/useTickets";
-import HomeLayout from "../../layouts/Homelayout";
-function Home() {
-  const [ticketsState] = useTickets();
+import useTickets from "../hooks/useTickets";
+import HomeLayout from "../layouts/Homelayout";
+const ExpandedComponent = ({ data }) => (
+  <pre>{JSON.stringify(data, null, 2)}</pre>
+);
+function Dashboard() {
+  const [ticketState] = useTickets();
+  const { toPDF, targetRef } = usePDF({ filename: "page.pdf" });
+
+  const columns = [
+    {
+      name: "Ticket Id",
+      selector: (row) => row._id,
+      reorder: true,
+    },
+    {
+      name: "Title",
+      selector: (row) => row.title,
+      reorder: true,
+    },
+    {
+      name: "Description",
+      selector: (row) => row.description,
+      reorder: true,
+    },
+    {
+      name: "Reporter",
+      selector: (row) => row.assignedTo,
+      reorder: true,
+    },
+    {
+      name: "Priority",
+      selector: (row) => row.ticketPriority,
+      reorder: true,
+      sortable: true,
+    },
+    {
+      name: "Assignee",
+      selector: (row) => row.assignee,
+      reorder: true,
+    },
+    {
+      name: "Status",
+      selector: (row) => row.status,
+      reorder: true,
+      sortable: true,
+    },
+  ];
+
+  const customStyles = {
+    rows: {
+      style: {
+        minHeight: "72px", // override the row height
+        fontSize: "18px",
+      },
+    },
+    headCells: {
+      style: {
+        paddingLeft: "8px", // override the cell padding for head cells
+        paddingRight: "8px",
+      },
+    },
+    cells: {
+      style: {
+        paddingLeft: "8px", // override the cell padding for data cells
+        paddingRight: "8px",
+      },
+    },
+  };
 
   return (
     <HomeLayout>
-      {ticketsState && (
-        <div className="mt-10 flex flex-row justify-center items-center gap-5 flex-wrap">
-          <Card
-            titleText="Open"
-            status={
-              ticketsState.ticketDistribution.open /
-              ticketsState.downloadedTickets.length
-            }
-            quantity={ticketsState.ticketDistribution.open}
-            background="bg-yellow-300"
-            borderColor="border-green-300"
-            fontColor="text-black"
-            dividerColor="bg-black"
-          >
-            <BsFillPencilFill className="inline mr-2" />
-          </Card>
-          <Card
-            titleText="In Progress"
-            status={
-              ticketsState.ticketDistribution.inProgress /
-              ticketsState.downloadedTickets.length
-            }
-            quantity={ticketsState.ticketDistribution.inProgress}
-            background="bg-orange-300"
-            borderColor="border-red-300"
-            fontColor="text-black"
-            dividerColor="bg-black"
-          >
-            <TbProgressBolt className="inline mr-2" />
-          </Card>
-          <Card
-            titleText="Resolved"
-            status={
-              ticketsState.ticketDistribution.resolved /
-              ticketsState.downloadedTickets.length
-            }
-            quantity={ticketsState.ticketDistribution.resolved}
-            background="bg-purple-300"
-            borderColor="border-blue-700"
-            fontColor="text-black"
-            dividerColor="bg-black"
-          >
-            <MdOutlineDoneAll className="inline mr-2" />
-          </Card>
-          <Card
-            titleText="On Hold"
-            status={
-              ticketsState.ticketDistribution.onHold /
-              ticketsState.downloadedTickets.length
-            }
-            quantity={ticketsState.ticketDistribution.onHold}
-            background="bg-gray-300"
-            borderColor="border-gray-800"
-            fontColor="text-black"
-            dividerColor="bg-black"
-          >
-            <MdPending className="inline mr-2" />
-          </Card>
-          <Card
-            titleText="Cancelled"
-            status={
-              ticketsState.ticketDistribution.cancelled /
-              ticketsState.downloadedTickets.length
-            }
-            quantity={ticketsState.ticketDistribution.cancelled}
-            background="bg-blue-300"
-            borderColor="border-violet-300"
-            fontColor="text-black"
-            dividerColor="bg-black"
-          >
-            <MdCancel className="inline mr-2" />
-          </Card>
+      <div className="min-h-[90vh] flex flex-col items-center justify-center gap-2">
+        <div className="bg-yellow-500 w-full text-black text-center text-3xl py-4 font-bold hover:bg-yellow-400 transition-all ease-in-out duration-300">
+          Tickets Records{" "}
+          <AiOutlineDownload
+            className="cursor-pointer inline "
+            onClick={() => toPDF()}
+          />
         </div>
-      )}
+
+        <div ref={targetRef}>
+          {ticketState && (
+            <DataTable
+              columns={columns}
+              data={ticketState.ticketList}
+              expandableRows
+              expandableRowsComponent={ExpandedComponent}
+              customStyles={customStyles}
+            />
+          )}
+        </div>
+      </div>
     </HomeLayout>
   );
 }
 
-export default Home;
+export default Dashboard;

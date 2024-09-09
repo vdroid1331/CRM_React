@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { BsFillPencilFill } from "react-icons/bs";
 import { MdCancel, MdOutlineDoneAll, MdPending } from "react-icons/md";
 import { TbProgressBolt } from "react-icons/tb";
@@ -17,7 +16,7 @@ function Home() {
             titleText="Open"
             status={
               ticketsState.ticketDistribution.open /
-              ticketsState.ticketList.length
+              ticketsState.downloadedTickets.length
             }
             quantity={ticketsState.ticketDistribution.open}
             background="bg-yellow-300"
@@ -31,7 +30,7 @@ function Home() {
             titleText="In Progress"
             status={
               ticketsState.ticketDistribution.inProgress /
-              ticketsState.ticketList.length
+              ticketsState.downloadedTickets.length
             }
             quantity={ticketsState.ticketDistribution.inProgress}
             background="bg-orange-300"
@@ -45,7 +44,7 @@ function Home() {
             titleText="Resolved"
             status={
               ticketsState.ticketDistribution.resolved /
-              ticketsState.ticketList.length
+              ticketsState.downloadedTickets.length
             }
             quantity={ticketsState.ticketDistribution.resolved}
             background="bg-purple-300"
@@ -59,7 +58,7 @@ function Home() {
             titleText="On Hold"
             status={
               ticketsState.ticketDistribution.onHold /
-              ticketsState.ticketList.length
+              ticketsState.downloadedTickets.length
             }
             quantity={ticketsState.ticketDistribution.onHold}
             background="bg-gray-300"
@@ -73,7 +72,7 @@ function Home() {
             titleText="Cancelled"
             status={
               ticketsState.ticketDistribution.cancelled /
-              ticketsState.ticketList.length
+              ticketsState.downloadedTickets.length
             }
             quantity={ticketsState.ticketDistribution.cancelled}
             background="bg-blue-300"
