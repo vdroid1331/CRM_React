@@ -15,7 +15,7 @@ function Card({
   function onCardClick() {
     navigate(`/dashboard?status=${titleText}`);
   }
-
+  const statusPercent = status * 100;
   return (
     <div
       onClick={onCardClick}
@@ -24,6 +24,7 @@ function Card({
       <div className="text-primary-content text-2xl mb-2">
         {children} <span>{titleText}</span>
       </div>
+
       <div className={`divider ${dividerColor} h-0.5 mx-4 rounded-sm`}></div>
 
       <div className="flex justify-around gap-4 items-center mt-2">
@@ -32,10 +33,11 @@ function Card({
           className={`radial-progress ${fontColor}`}
           style={{ "--value": status * 100 }}
         >
-          {status * 100}%
+          {statusPercent.toString().substring(0, 4)}%
         </div>
       </div>
     </div>
   );
 }
+
 export default Card;
