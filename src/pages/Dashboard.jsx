@@ -101,7 +101,10 @@ function Dashboard() {
               customStyles={customStyles}
             />
           )}
-          <TicketDetailsModal ticket={selectedTicket} />
+          <TicketDetailsModal
+            ticket={selectedTicket}
+            key={selectedTicket._id}
+          />
         </div>
       </div>
     </HomeLayout>
